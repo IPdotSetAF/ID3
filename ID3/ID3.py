@@ -27,6 +27,8 @@ class ID3:
     def __repr__(self):
         return f'{self}'
     
+    __badCalssified = 'ID3.badClassified'
+    
     def __init__(self, id3 = 0):
         if(id3):
             for attr_name in id3.__dict__:
@@ -83,8 +85,7 @@ class ID3:
         value = self._Values[np.where(data[index] == self._Keys)]
         
         if (len(value) == 0):
-            self.AddNewKeyValue(data[index] ,target)
-            return ID3_Lazy.__badCalssified
+            return ID3.__badCalssified
         
         value = value[0]
         if isinstance(value , ID3):
