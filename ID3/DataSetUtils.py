@@ -4,9 +4,10 @@ import numpy as np
 
 
 class CSV_Loader:
-    def __init__(self, fileName):
+    def __init__(self, fileName, verbose = 1):
         rawData = read_csv(fileName)
-        print(f'\nraw data : \n\n{rawData}')
+        if verbose:
+            print(f'\nraw data : \n\n{rawData}')
 
         self.features = np.array(rawData.columns)[:-1]
         #print(f'\ncolumns are : {columns}')
