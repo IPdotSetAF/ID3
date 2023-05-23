@@ -1,4 +1,4 @@
-from ID3 import IG_ID3, GR_ID3, GI_ID3
+from .ID3 import IG_ID3, GR_ID3, GI_ID3
 from enum import Enum
 
 class ID3_Algorythm(Enum) :

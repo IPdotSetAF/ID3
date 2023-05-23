@@ -1,4 +1,4 @@
-from ID3 import ID3 
+from .ID3 import ID3 
 import numpy as np
 
 class ID3_Lazy(ID3):
@@ -45,6 +45,16 @@ class ID3_Lazy(ID3):
                 self.AddNewKeyValue( data[index] ,id3)
 
                 return ID3_Lazy.__badCalssified
+    
+    def Evaluate(self, features, x_test, y_test, verbose = 1):
+        correct = 0 
+        for i in range(len(x_test)):
+            result = self.Resolve(features, x_test[i], y_test[i])
+            if verbose:
+                print(f'{x_test[i]}, {result}')
+            if (result == y_test[i]):
+                correct += 1
+        return correct/len(x_test)
     
     def AddNewKeyValue(self, key ,target):
         self._Keys = np.append(self._Keys , [key])

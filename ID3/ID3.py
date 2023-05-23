@@ -27,6 +27,15 @@ class ID3:
     def __repr__(self):
         return f'{self}'
     
+    def __init__(self, id3 = 0):
+        if(id3):
+            for attr_name in id3.__dict__:
+                setattr(self, attr_name, getattr(id3, attr_name))
+
+            for i in range(len(self._Values)):
+                if (isinstance(self._Values[i] , ID3)):
+                    self._Values[i] = ID3(self._Values[i])
+
     def _CalculateEntropy(self, target):
         totalEntries = len(target)
         entropy = 0
@@ -72,11 +81,26 @@ class ID3:
     def Resolve(self, features, data):
         index = np.where(features == self._Name)[0]
         value = self._Values[np.where(data[index] == self._Keys)]
+        
+        if (len(value) == 0):
+            self.AddNewKeyValue(data[index] ,target)
+            return ID3_Lazy.__badCalssified
+        
         value = value[0]
         if isinstance(value , ID3):
             return value.Resolve(features, data)
         else:
             return value
+        
+    def Evaluate(self, features, x_test, y_text, verbose = 1):
+        correct = 0 
+        for i in range(len(x_test)):
+            result = self.Resolve(features, x_test[i])
+            if verbose:
+                print(f'{x_test[i]}, {result}')
+            if (result == y_text[i]):
+                correct += 1
+        return correct/len(x_test)
         
 class IG_ID3(ID3):
     

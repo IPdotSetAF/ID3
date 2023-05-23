@@ -1,5 +1,5 @@
-﻿import numpy as np
-from ID3 import ID3
+import numpy as np
+from .ID3 import ID3
 
 c = ["│","─","┌","┐","└","┘","├","┤","┬","┴",">","<"]
 # c = ["|","-","┌","+","└","┘","+","┤","┬","┴",">","<"]
