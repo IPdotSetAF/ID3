@@ -1,11 +1,11 @@
 import sys
 sys.path.append('../')
 
-from ID3.DataSetUtils import CSV_Loader , train_test_dataSplit
-from ID3.ID3_Trainer import ID3_Trainer ,ID3_Algorythm
-from ID3.ID3_Drawer import ID3_Drawer
-from ID3.ID3_Lazy import ID3_Lazy
-from ID3.ID3 import ID3
+from ID3 import CSV_Loader , train_test_dataSplit
+from ID3 import ID3_Trainer ,ID3_Algorythm
+from ID3 import ID3_Drawer
+from ID3 import ID3_Lazy
+from ID3 import ID3
 
 _dataSetFileName = 'PlayTennis.csv'
 
@@ -27,12 +27,15 @@ print('Tree :\n')
 ID3_Drawer(id3).Draw()
 
 
-print(id3.Resolve(_features, _testData[0]))
+print(id3.predict(_features, _testData[0]))
 
-print(id3.Evaluate(_features, _testData, _testTargets))
+print(id3.score(_features, _testData, _testTargets))
 
 id3 = ID3_Lazy(id3)
 
-print(id3.Evaluate(_features, _testData, _testTargets))
-print(id3.Evaluate(_features, _testData, _testTargets))
+print(id3.score(_features, _testData, _testTargets))
+
+ID3_Drawer(id3).Draw()
+
+print(id3.score(_features, _testData, _testTargets))
     

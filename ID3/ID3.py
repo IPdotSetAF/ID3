@@ -27,7 +27,8 @@ class ID3:
     def __repr__(self):
         return f'{self}'
     
-    __badCalssified = 'ID3.badClassified'
+    def _badCalssified():
+       return 'ID3.badClassified'
     
     def __init__(self, id3 = 0):
         if(id3):
@@ -38,7 +39,7 @@ class ID3:
                 if (isinstance(self._Values[i] , ID3)):
                     self._Values[i] = ID3(self._Values[i])
 
-    def _CalculateEntropy(self, target):
+    def _calculate_entropy(self, target):
         totalEntries = len(target)
         entropy = 0
         for t in np.unique(target):
@@ -47,22 +48,22 @@ class ID3:
             entropy -= targetProbability * np.log2(targetProbability)
         return entropy
     
-    def _SliceDataByFeatureIndex(self, data, featureIndex):
+    def _slice_data_by_feature_index(self, data, featureIndex):
         featureData = np.array(data)[:,featureIndex]
         featurePossibleValues = np.unique(featureData)
         return featureData , featurePossibleValues
     
-    def _CalculateBestFeature(self, entropy, features, data, target):
+    def _calculate_best_feature(self, entropy, features, data, target):
         pass
     
-    def _Instantiate(self):
+    def _instantiate(self):
         pass
     
-    def Train(self, features, data , target):
-        self.__TotalEntropy = self._CalculateEntropy(target)
-        self._Name, featureIndex = self._CalculateBestFeature( self.__TotalEntropy, features, data, target)
+    def fit(self, features, data , target):
+        self.__TotalEntropy = self._calculate_entropy(target)
+        self._Name, featureIndex = self._calculate_best_feature( self.__TotalEntropy, features, data, target)
         
-        featureData ,featurePossibleValues = self._SliceDataByFeatureIndex(data, featureIndex)
+        featureData ,featurePossibleValues = self._slice_data_by_feature_index(data, featureIndex)
         self._Keys = featurePossibleValues
         
         newFeatures = np.delete(features, featureIndex, 0)
@@ -75,28 +76,28 @@ class ID3:
             if(len(pTargets) == 1):
                 tmpValues.append(pTargets[0])
             else:
-                tmpValues.append(self._Instantiate())
-                tmpValues[-1].Train(newFeatures, np.array(newData)[valueIndecies], newTarget)
+                tmpValues.append(self._instantiate())
+                tmpValues[-1].fit(newFeatures, np.array(newData)[valueIndecies], newTarget)
         
         self._Values = np.array(tmpValues)
     
-    def Resolve(self, features, data):
+    def predict(self, features, data):
         index = np.where(features == self._Name)[0]
         value = self._Values[np.where(data[index] == self._Keys)]
         
         if (len(value) == 0):
-            return ID3.__badCalssified
+            return type(self)._badCalssified()
         
         value = value[0]
         if isinstance(value , ID3):
-            return value.Resolve(features, data)
+            return value.predict(features, data)
         else:
             return value
         
-    def Evaluate(self, features, x_test, y_text, verbose = 1):
+    def score(self, features, x_test, y_text, verbose = 1):
         correct = 0 
         for i in range(len(x_test)):
-            result = self.Resolve(features, x_test[i])
+            result = self.predict(features, x_test[i])
             if verbose:
                 print(f'{x_test[i]}, {result}')
             if (result == y_text[i]):
@@ -108,17 +109,17 @@ class IG_ID3(ID3):
     def __init__(self):
         super()
         
-    def _Instantiate(self):
+    def _instantiate(self):
         return IG_ID3()
     
-    def _CalculateBestFeature(self, entropy, features, data, target):
+    def _calculate_best_feature(self, entropy, features, data, target):
         gains = np.zeros((len(features)), dtype=float)
         for featureIndex in range(len(features)):
-            featureData ,featurePossibleValues = self._SliceDataByFeatureIndex(data, featureIndex)
+            featureData ,featurePossibleValues = self._slice_data_by_feature_index(data, featureIndex)
             gains[featureIndex] = entropy
             for c in featurePossibleValues:
                 valueIndecies = np.where(featureData == c)
-                gains[featureIndex] -= (np.count_nonzero(featureData == c)/ len(data)) * self._CalculateEntropy(np.array(target)[valueIndecies])
+                gains[featureIndex] -= (np.count_nonzero(featureData == c)/ len(data)) * self._calculate_entropy(np.array(target)[valueIndecies])
         
 #         print(features)
 #         print(gains)
@@ -130,16 +131,16 @@ class GR_ID3(ID3):
     def __init__(self):
         super()
         
-    def _Instantiate(self):
+    def _instantiate(self):
         return GR_ID3()
     
-    def _CalculateBestFeature(self, entropy, features, data, target):
+    def _calculate_best_feature(self, entropy, features, data, target):
         split = np.zeros((len(features)), dtype=float)
         for featureIndex in range(len(features)):
-            featureData ,featurePossibleValues = self._SliceDataByFeatureIndex(data, featureIndex)
+            featureData ,featurePossibleValues = self._slice_data_by_feature_index(data, featureIndex)
             for c in featurePossibleValues:
                 valueIndecies = np.where(featureData == c)
-                split[featureIndex] -= (np.count_nonzero(featureData == c)/ len(data)) * self._CalculateEntropy(np.array(target)[valueIndecies])
+                split[featureIndex] -= (np.count_nonzero(featureData == c)/ len(data)) * self._calculate_entropy(np.array(target)[valueIndecies])
             split[featureIndex] = (entropy + split[featureIndex])/split[featureIndex]
 #         print(features)
 #         print(gains)
@@ -151,7 +152,7 @@ class GI_ID3(ID3):
     def __init__(self):
         super()
         
-    def _Instantiate(self):
+    def _instantiate(self):
         return GI_ID3()
     
     def __CalculateGINI(self, target):
@@ -163,10 +164,10 @@ class GI_ID3(ID3):
             gini -= targetProbability * targetProbability
         return gini
     
-    def _CalculateBestFeature(self, entropy, features, data, target):
+    def _calculate_best_feature(self, entropy, features, data, target):
         ginis = np.zeros((len(features)), dtype=float)
         for featureIndex in range(len(features)):
-            featureData ,featurePossibleValues = self._SliceDataByFeatureIndex(data, featureIndex)
+            featureData ,featurePossibleValues = self._slice_data_by_feature_index(data, featureIndex)
             for c in featurePossibleValues:
                 valueIndecies = np.where(featureData == c)
                 ginis[featureIndex] += (np.count_nonzero(featureData == c)/ len(data)) * self.__CalculateGINI(np.array(target)[valueIndecies])

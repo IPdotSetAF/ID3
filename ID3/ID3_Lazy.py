@@ -12,7 +12,7 @@ class ID3_Lazy(ID3):
             if (isinstance(self._Values[i] , ID3)):
                 self._Values[i] = ID3_Lazy(self._Values[i])
 
-    def Resolve(self, features, data, target):
+    def predict(self, features, data, target):
         index = np.where(features == self._Name)[0]
         value = self._Values[np.where(data[index] == self._Keys)]
         
@@ -25,7 +25,7 @@ class ID3_Lazy(ID3):
 
         value = value[0]
         if isinstance(value , ID3):
-            return value.Resolve(np.delete(features, [index]), np.delete(data, [index]), target)
+            return value.predict(np.delete(features, [index]), np.delete(data, [index]), target)
         else:
             if (value == target):
                 return value
@@ -41,12 +41,12 @@ class ID3_Lazy(ID3):
                 self._Values = np.delete(self._Values, oldIndex)
                 self.AddNewKeyValue( data[index] ,id3)
 
-                return ID3.__badCalssified
+                return type(self)._badCalssified()
     
-    def Evaluate(self, features, x_test, y_test, verbose = 1):
+    def score(self, features, x_test, y_test, verbose = 1):
         correct = 0 
         for i in range(len(x_test)):
-            result = self.Resolve(features, x_test[i], y_test[i])
+            result = self.predict(features, x_test[i], y_test[i])
             if verbose:
                 print(f'{x_test[i]}, {result}')
             if (result == y_test[i]):

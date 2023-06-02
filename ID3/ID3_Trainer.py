@@ -22,4 +22,4 @@ class ID3_Trainer :
             print('invalid Algorythm')
             return
         
-        self.__ID3.Train(featurs, data , target)
+        self.__ID3.fit(featurs, data , target)
