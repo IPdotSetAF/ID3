@@ -26,10 +26,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="InfoGain_ID3.py" />
+    <Compile Include="GainRatio_ID3.py" />
+    <Compile Include="GiniIndex_ID3.py" />
     <Compile Include="ID3.py" />
-    <Compile Include="ID3_Drawer.py" />
+    <Compile Include="Drawer.py" />
     <Compile Include="Lazy_ID3.py" />
-    <Compile Include="ID3_Trainer.py" />
+    <Compile Include="Trainer.py" />
     <Compile Include="DataSetUtils.py" />
     <Compile Include="__init__.py" />
   </ItemGroup>

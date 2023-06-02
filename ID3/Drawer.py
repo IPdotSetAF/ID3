@@ -4,7 +4,7 @@ from .ID3 import ID3
 c = ["│","─","┌","┐","└","┘","├","┤","┬","┴",">","<"]
 # c = ["|","-","┌","+","└","┘","+","┤","┬","┴",">","<"]
 
-class ID3_Drawer :
+class Drawer :
     
     def __init__(self, ID3):
         self.__ID3 = ID3

@@ -2,7 +2,7 @@ import sys
 sys.path.append('../')
 
 from ID3 import CSV_Loader , train_test_dataSplit
-from ID3 import ID3_Trainer ,ID3_Algorythm
+from ID3 import Trainer ,Algorithms
 from ID3 import Lazy_ID3
 from ID3 import ID3
 
@@ -16,9 +16,9 @@ _targets = _dataSet.targets
 _trainData ,_trainTargets , _testData, _testTargets = train_test_dataSplit(_data, _targets, 0.5)
 
 
-trainer = ID3_Trainer(_features, _trainData, _trainTargets, ID3_Algorythm.INFO_GAIN)
-#trainer = ID3_Trainer(_features, _trainData, _trainTargets, ID3_Algorythm.GAIN_RATIO)
-#trainer = ID3_Trainer(_features, _trainData, _trainTargets, ID3_Algorythm.GINI_INDEX)
+trainer = Trainer(_features, _trainData, _trainTargets, Algorithms.INFO_GAIN)
+#trainer = Trainer(_features, _trainData, _trainTargets, Algorithms.GAIN_RATIO)
+#trainer = Trainer(_features, _trainData, _trainTargets, Algorithms.GINI_INDEX)
 
 id3 = trainer.ID3
 
