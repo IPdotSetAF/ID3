@@ -25,7 +25,8 @@ id3 = trainer.ID3
 
 print('Tree :\n')
 id3.draw()
-
+id3.generalize()
+id3.draw()
 
 print(id3.predict(_features, _testData[0]))
 

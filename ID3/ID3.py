@@ -113,5 +113,32 @@ class ID3:
         Drawer(self).Draw()
 
     def generalize(self):
-        pass
+        uvs = np.unique(self._Values)
+        for uv in uvs:
+            sims = np.where(self._Values == uv)[0]
+            if len(sims) > 1:
+                self._Keys = np.delete(self._Keys, sims[1:])
+                self._Values = np.delete(self._Values, sims[1:])
+                self._Keys[sims[0]] = '?'
+                break
+                
+        for i in range(len(self._Values)):
+            if isinstance(self._Values[i] , ID3):
+                self._Values[i].generalize()
+
+    def __eq__(self, other):
+        if isinstance(other, ID3):
+            if self._Name != other._Name:
+                return False
+            else:
+                dict1 = dict(zip(self._Keys, self._Values))
+                dict2 = dict(zip(other._Keys, other._Values))
+                return dict1 == dict2
+        return False
+
+    def __lt__(self, other):
+        return False
+
+    def __gt__(self, other):
+        return True
         
