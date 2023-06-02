@@ -86,6 +86,9 @@ class ID3:
         value = self._Values[np.where(data[index] == self._Keys)]
         
         if (len(value) == 0):
+            value = self._Values[np.where('?' == self._Keys)]
+
+        if (len(value) == 0):
             return type(self)._badCalssified()
         
         value = value[0]
@@ -94,7 +97,7 @@ class ID3:
         else:
             return value
         
-    def score(self, features, x_test, y_text, verbose = 1):
+    def score(self, features, x_test, y_text, verbose = 0):
         correct = 0 
         for i in range(len(x_test)):
             result = self.predict(features, x_test[i])
@@ -108,4 +111,7 @@ class ID3:
         from .Drawer import Drawer
 
         Drawer(self).Draw()
+
+    def generalize(self):
+        pass
         

@@ -20,8 +20,8 @@ class Lazy_ID3(ID3):
             value = self._Values[np.where('?' == self._Keys)]
 
         if (len(value) == 0):
-            self.AddNewKeyValue(data[index] ,target)
-            return ID3.__badCalssified
+            self.__add_new_key_value(data[index] ,target)
+            return type(self)._badCalssified()
 
         value = value[0]
         if isinstance(value , ID3):
@@ -39,11 +39,11 @@ class Lazy_ID3(ID3):
                 oldIndex = np.where(data[index] == self._Keys)[0]
                 self._Keys = np.delete(self._Keys, oldIndex)
                 self._Values = np.delete(self._Values, oldIndex)
-                self.AddNewKeyValue( data[index] ,id3)
+                self.__add_new_key_value( data[index] ,id3)
 
                 return type(self)._badCalssified()
     
-    def score(self, features, x_test, y_test, verbose = 1):
+    def score(self, features, x_test, y_test, verbose = 0):
         correct = 0 
         for i in range(len(x_test)):
             result = self.predict(features, x_test[i], y_test[i])
@@ -53,6 +53,6 @@ class Lazy_ID3(ID3):
                 correct += 1
         return correct/len(x_test)
     
-    def AddNewKeyValue(self, key ,target):
+    def __add_new_key_value(self, key ,target):
         self._Keys = np.append(self._Keys , [key])
         self._Values = np.append(self._Values , [target])

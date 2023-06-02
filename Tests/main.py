@@ -1,4 +1,5 @@
 import sys
+from tabnanny import verbose
 sys.path.append('../')
 
 from ID3 import CSV_Loader , train_test_dataSplit
@@ -28,13 +29,13 @@ id3.draw()
 
 print(id3.predict(_features, _testData[0]))
 
-print(id3.score(_features, _testData, _testTargets))
+print(id3.score(_features, _testData, _testTargets, verbose=1))
 
 id3 = Lazy_ID3(id3)
 
-print(id3.score(_features, _testData, _testTargets))
+print(id3.score(_features, _testData, _testTargets, verbose=1))
 
 id3.draw()
 
-print(id3.score(_features, _testData, _testTargets))
+print(id3.score(_features, _testData, _testTargets, verbose=1))
     
