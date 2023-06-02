@@ -28,7 +28,7 @@
   <ItemGroup>
     <Compile Include="ID3.py" />
     <Compile Include="ID3_Drawer.py" />
-    <Compile Include="ID3_Lazy.py" />
+    <Compile Include="Lazy_ID3.py" />
     <Compile Include="ID3_Trainer.py" />
     <Compile Include="DataSetUtils.py" />
     <Compile Include="__init__.py" />

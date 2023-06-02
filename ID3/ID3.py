@@ -103,6 +103,11 @@ class ID3:
             if (result == y_text[i]):
                 correct += 1
         return correct/len(x_test)
+
+    def draw(self):
+        from .ID3_Drawer import ID3_Drawer
+
+        ID3_Drawer(self).Draw()
         
 class IG_ID3(ID3):
     

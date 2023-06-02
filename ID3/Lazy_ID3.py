@@ -1,7 +1,7 @@
 from .ID3 import ID3 
 import numpy as np
 
-class ID3_Lazy(ID3):
+class Lazy_ID3(ID3):
     def __init__(self, id3):
         super()
 
@@ -10,7 +10,7 @@ class ID3_Lazy(ID3):
 
         for i in range(len(self._Values)):
             if (isinstance(self._Values[i] , ID3)):
-                self._Values[i] = ID3_Lazy(self._Values[i])
+                self._Values[i] = Lazy_ID3(self._Values[i])
 
     def predict(self, features, data, target):
         index = np.where(features == self._Name)[0]
@@ -34,7 +34,7 @@ class ID3_Lazy(ID3):
                 id3._Name = np.delete(features,[index])[0]
                 id3._Keys = np.array([np.delete(data,[index])[0], '?'])
                 id3._Values = np.array([target, value])
-                id3 = ID3_Lazy(id3)
+                id3 = Lazy_ID3(id3)
 
                 oldIndex = np.where(data[index] == self._Keys)[0]
                 self._Keys = np.delete(self._Keys, oldIndex)
