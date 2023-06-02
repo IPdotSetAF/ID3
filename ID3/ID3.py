@@ -6,6 +6,8 @@ class ID3:
     def Name(self):
         return self._Name
     
+    _Index = 0
+
     _Keys = []
     @property 
     def Keys(self):
@@ -61,7 +63,7 @@ class ID3:
     
     def fit(self, features, data , target):
         self.__TotalEntropy = self._calculate_entropy(target)
-        self._Name, featureIndex = self._calculate_best_feature( self.__TotalEntropy, features, data, target)
+        self._Name, self._Index = self._calculate_best_feature( self.__TotalEntropy, features, data, target)
         
         featureData ,featurePossibleValues = self._slice_data_by_feature_index(data, featureIndex)
         self._Keys = featurePossibleValues
@@ -81,9 +83,8 @@ class ID3:
         
         self._Values = np.array(tmpValues)
     
-    def predict(self, features, data):
-        index = np.where(features == self._Name)[0]
-        value = self._Values[np.where(data[index] == self._Keys)]
+    def predict(self, data):
+        value = self._Values[np.where(data[self._Index] == self._Keys)]
         
         if (len(value) == 0):
             value = self._Values[np.where('?' == self._Keys)]
@@ -93,7 +94,7 @@ class ID3:
         
         value = value[0]
         if isinstance(value , ID3):
-            return value.predict(features, data)
+            return value.predict(data)
         else:
             return value
         
