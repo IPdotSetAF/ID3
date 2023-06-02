@@ -114,13 +114,13 @@ class ID3:
 
     def generalize(self):
         uvs = np.unique(self._Values)
-        for uv in uvs:
-            sims = np.where(self._Values == uv)[0]
-            if len(sims) > 1:
-                self._Keys = np.delete(self._Keys, sims[1:])
-                self._Values = np.delete(self._Values, sims[1:])
-                self._Keys[sims[0]] = '?'
-                break
+        sims = [np.where(self._Values == uv)[0] for uv in uvs]
+        sims = sorted(sims, key=len, reverse=True)
+        sims = sims[0]
+        if len(sims) > 1:
+            self._Keys = np.delete(self._Keys, sims[1:])
+            self._Values = np.delete(self._Values, sims[1:])
+            self._Keys[sims[0]] = '?'
                 
         for i in range(len(self._Values)):
             if isinstance(self._Values[i] , ID3):
